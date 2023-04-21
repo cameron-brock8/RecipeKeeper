@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}- FlaskApp</title>
+    <style>
+        .post {
+            padding: 10px;
+            margin: 5px;
+            background-color: #f3f3f3
+        }
+
+        nav a {
+            color: #3490c9;
+            font-size: 2.5em;
+            margin-left: 5px;
+            text-decoration: none;
+        }
+        .alert {
+            padding: 20px;
+            margin: 5px;
+            color: #970020;
+            background-color: #ffd5de;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('add') }}">Add Recipes   -  </a>
+        <a href="{{ url_for('recipes') }}">Recipes   -  </a>
+        <a href="{{ url_for('ingredients') }}">Ingredients   -   </a>
+        <a href="{{ url_for('directions') }}">Directions</a>
+    </nav>
+    <hr>
+    <div class="content">
+        {% for message in get_flashed_messages() %}
+            <div class="alert">{{ message }}</div>
+        {% endfor %}
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>

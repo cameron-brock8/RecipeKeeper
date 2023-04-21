@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Edit "{{ recipe['name'] }}" {% endblock %}</h1>
+    <form method="post">
+        <label for="name">Recipe Name</label>
+        <br>
+            <input type="text" name="name"
+                placeholder="Recipe Name"
+                value="{{ request.form['name'] or recipe['name'] }}"></input>
+        <br>
+
+        <label for="id">ID</label>
+        <br>
+            <input type="integer" name="id"
+                placeholder="ID"
+                value="{{ request.form['id'] or recipe['id'] }}"></input>
+        <br>
+
+        <label for="meal">Meal Type</label>
+        <br>
+        <input type="text" name="meal"
+                  placeholder="Meal Type"
+                  value="{{ request.form['meal'] or recipe['meal'] }}"></input>
+        <br>
+
+        <label for="difficulty">Difficulty Rating 1-10</label>
+        <br>
+        <input type="integer" name="difficulty"
+               placeholder="Difficulty"
+               value="{{ request.form['difficulty'] or recipe['difficulty'] }}"></input>
+        <br>
+
+          <label for="diet">Dietary Restrictions</label>
+        <br>
+        <input type="text" name="diet"
+               placeholder="Dietary Restrictions"
+               value="{{ request.form['diet'] or recipe['diet'] }}"></input>
+        <br>
+
+        <label for="style">Meal Style</label>
+        <br>
+        <input type="text" name="style"
+               placeholder="Meal Style"
+               value="{{ request.form['style'] or recipe['style'] }}"></input>
+        <br>
+
+        <label for="list">Ingredients List</label>
+        <br>
+        <textarea name="list"
+                  placeholder="Ingredients List"
+                  rows="10"
+                  cols="60"
+                  >{{ request.form['list'] or recipe['list'] }}</textarea>
+        <br>
+
+        <label for="steps">Steps</label>
+        <br>
+        <textarea name="steps"
+                  placeholder="Steps"
+                  rows="10"
+                  cols="60"
+                  >{{ request.form['steps'] or recipe['steps'] }}</textarea>
+        <br> 
+
+        <label for="time">Time</label>
+        <br>
+        <input type="integer" name="time"
+               placeholder="Time"
+               value="{{ request.form['time'] or recipe['time']}}"></input>
+        <br>
+        
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

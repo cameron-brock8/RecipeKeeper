@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Entries</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: blue;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recipe Database</h1>
+<table>
+  {% for item in items %}
+        <div>
+            <a href="{{ url_for('change',id=item['id']) }}">Edit Recipe</a> 
+        </div>
+        <tr>
+            <li>Recipe id: {{ item[0] }} <br> {{ item[1] }} <br> {{ item[2] }} <br> {{ item[3] }} <br> {{ item[4] }} <br> {{ item[5] }}
+             Ingredients: {{ item[7] }} <br>
+             Directions: {{ item[9] }} <br> {{ item[10] }} </li> 
+        </tr> 
+        <div>
+            <a href="{{ url_for('delete',id=item['id']) }}">Delete Recipe</a> <br> <br> <br>
+        </div>
+  {% endfor %}
+</table>
+</body>
+</html>
+
+{% endblock %}
