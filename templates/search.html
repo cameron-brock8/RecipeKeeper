@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{% block title %} Recipe Search {% endblock %}</h1>
+    <label for="id">Recipe ID</label>
+        <br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 25 type="integer" name="id_query" placeholder="Enter your ID query">
+        <br>
+    <label for="name">Recipe Name</label>
+        <br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 25 type="text" name="name_query" placeholder="Enter your name query">
+        <br>
+    <label for="meal">Meal Type</label>
+        <br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 25 type="text" name="meal_query" placeholder="Enter your meal query">
+        <br>
+    <label for="difficulty">Difficulty Rating 1-10</label>
+        <br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 25 type="integer" name="difficulty_query" placeholder="Enter your difficulty query">
+        <br>
+    <label for="diet">Dietary Restrictions</label>
+        <br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 25 type="text" name="diet_query" placeholder="Enter your diet query">
+        <br>
+    <label for="style">Meal Style</label>
+        <br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 25 type="style" name="style_query" placeholder="Enter your meal style query">
+        <br>
+
+
+        <br><br><button type="submit">Search</button>
+      </form>
+
+{% endblock %}

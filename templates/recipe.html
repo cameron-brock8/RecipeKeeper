@@ -28,19 +28,26 @@
 <body>
     <h1>Recipe Database</h1>
 <table>
-  {% for item in items %}
+
+    {% if not items %}
+    <script>
+        alert("No items found.");
+        </script>
+    {% endif %}
+
+    {% for item in items %}
+        <tr>
+            <li>{{ item[1] }} <br>Recipe id: {{ item[0] }} <br>Meal Type: {{ item[2] }} <br>Difficulty Rating 1-10: {{ item[3] }} <br>Dietary Restrictions: {{ item[4] }} <br>Meal Style: {{ item[5] }} <br>
+             Ingredients: {{ item[7] }} <br>
+             Directions: {{ item[9] }} <br>Time: {{ item[10] }} </li> 
+        </tr> 
         <div>
             <a href="{{ url_for('change',id=item['id']) }}">Edit Recipe</a> 
         </div>
-        <tr>
-            <li>Recipe id: {{ item[0] }} <br> {{ item[1] }} <br> {{ item[2] }} <br> {{ item[3] }} <br> {{ item[4] }} <br> {{ item[5] }}
-             Ingredients: {{ item[7] }} <br>
-             Directions: {{ item[9] }} <br> {{ item[10] }} </li> 
-        </tr> 
         <div>
             <a href="{{ url_for('delete',id=item['id']) }}">Delete Recipe</a> <br> <br> <br>
         </div>
-  {% endfor %}
+    {% endfor %}
 </table>
 </body>
 </html>

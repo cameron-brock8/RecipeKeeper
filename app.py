@@ -31,25 +31,7 @@ def recipes():
     cursor.execute('SELECT * FROM recipe JOIN ingredients ON recipe.id = ingredients.id JOIN directions ON recipe.id = directions.id')
     items = cursor.fetchall()
     conn.close()
-    return render_template('recipe.html', items=items)    
-
-@app.route('/ingredients')
-def ingredients():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM recipe JOIN ingredients ON recipe.id = ingredients.id JOIN directions ON recipe.id = directions.id')
-    items = cursor.fetchall()
-    conn.close()
-    return render_template('ingredients.html', items=items)    
-
-@app.route('/directions')
-def directions():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM recipe JOIN ingredients ON recipe.id = ingredients.id JOIN directions ON recipe.id = directions.id')
-    items = cursor.fetchall()
-    conn.close()
-    return render_template('directions.html', items=items)   
+    return render_template('recipe.html', items=items)      
 
 @app.route('/add', methods=('GET', 'POST'))
 def add():
@@ -127,6 +109,41 @@ def delete(id):
     conn.close()
     flash('"{}" was successfully deleted!'.format(recipe['name']))
     return redirect(url_for('recipes'))
+
+@app.route('/search', methods=('GET', 'POST'))
+def search():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    id_query = request.form.get('id_query')
+    if not id_query:
+        id_query = '%'
+    name_query = request.form.get('name_query')
+    if not name_query:
+        name_query = '%'
+    meal_query = request.form.get('meal_query')
+    if not meal_query:
+        meal_query = "%"
+    difficulty_query = request.form.get('difficulty_query')
+    if not difficulty_query:
+        difficulty_query = "%"
+    diet_query = request.form.get('diet_query')
+    if not diet_query:
+        diet_query = "%"
+    style_query = request.form.get('style_query')
+    if not style_query:
+        style_query = "%"
+    if not id_query and not name_query and not meal_query and not difficulty_query and not diet_query and not style_query: 
+        flash('Enter a search query')
+        return render_template('search.html')
+    else:
+        cursor.execute('SELECT * FROM recipe WHERE id = ? AND name = ? AND meal = ? AND difficulty = ? AND diet = ? AND style = ?',
+                        (id_query, name_query, meal_query, difficulty_query, diet_query, style_query))
+        items = cursor.fetchall()
+        conn.close()
+        if not items:
+            flash('No recipes match your query')
+            return render_template('search.html')
+        return render_template('recipe.html', items=items)
 
 
 if __name__ == '__main__':
