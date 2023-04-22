@@ -31,15 +31,15 @@
 
     {% if not items %}
     <script>
-        alert("No items found.");
+        alert("Empty database");
         </script>
     {% endif %}
 
     {% for item in items %}
         <tr>
-            <li>{{ item[1] }} <br>Recipe id: {{ item[0] }} <br>Meal Type: {{ item[2] }} <br>Difficulty Rating 1-10: {{ item[3] }} <br>Dietary Restrictions: {{ item[4] }} <br>Meal Style: {{ item[5] }} <br>
-             Ingredients: {{ item[7] }} <br>
-             Directions: {{ item[9] }} <br>Time: {{ item[10] }} </li> 
+            <li>{{ item[1] }} <br>Recipe id: {{ item[0] }} <br>Meal Type: {{ item[2] }} <br>Difficulty Rating 1-10: {{ item[3] }} <br>Dietary Restrictions: {{ item[4] }} <br>
+             Ingredients: {{ item[6] }} <br>
+             Directions: {{ item[8] }} <br>Time: {{ item[9] }} </li> 
         </tr> 
         <div>
             <a href="{{ url_for('change',id=item['id']) }}">Edit Recipe</a> 

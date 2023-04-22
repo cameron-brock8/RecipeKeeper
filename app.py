@@ -41,7 +41,6 @@ def add():
         meal = request.form['meal']
         difficulty = request.form['difficulty']
         diet = request.form['diet']
-        style = request.form['style']
         list = request.form['list']
         steps = request.form['steps']
         time = request.form['time']
@@ -53,8 +52,8 @@ def add():
         else:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO recipe (id, name, meal, difficulty, diet, style) VALUES (?, ?, ?, ?, ?, ?)',
-                         (id, name, meal, difficulty, diet, style))
+            cursor.execute('INSERT INTO recipe (id, name, meal, difficulty, diet) VALUES (?, ?, ?, ?, ?)',
+                         (id, name, meal, difficulty, diet))
             cursor.execute('INSERT INTO ingredients (id, list) VALUES (?, ?)',
                          (id, list))
             cursor.execute('INSERT INTO directions (id, steps, time) VALUES (?, ?, ?)',
@@ -78,7 +77,6 @@ def change(id):
         meal = request.form['meal']
         difficulty = request.form['difficulty']
         diet = request.form['diet']
-        style = request.form['style']
         list = request.form['list']
         steps = request.form['steps']
         time = request.form['time']
@@ -89,8 +87,8 @@ def change(id):
             flash('Name is required!')
         else:
             conn = get_db_connection()
-            conn.execute('UPDATE recipe SET name = ?, meal = ?, difficulty = ?, diet = ?, style = ? WHERE id = ?',
-                         (name, meal, difficulty, diet, style, id))
+            conn.execute('UPDATE recipe SET name = ?, meal = ?, difficulty = ?, diet = ? WHERE id = ?',
+                         (name, meal, difficulty, diet, id))
             conn.execute('UPDATE ingredients SET list = ? WHERE id = ?',
                         (list, id ))
             conn.execute('UPDATE directions SET steps = ?, time = ? WHERE id = ?',
@@ -129,15 +127,12 @@ def search():
     diet_query = request.form.get('diet_query')
     if not diet_query:
         diet_query = "%"
-    style_query = request.form.get('style_query')
-    if not style_query:
-        style_query = "%"
-    if id_query == "%" and name_query == "%" and meal_query == "%" and difficulty_query == "%" and diet_query == "%" and style_query == "%": 
+    if id_query == "%" and name_query == "%" and meal_query == "%" and difficulty_query == "%" and diet_query == "%": 
         flash('Enter a search query')
         return render_template('search.html')
     else:
-        cursor.execute('SELECT * FROM recipe WHERE id LIKE ? AND name LIKE ? AND meal LIKE ? AND difficulty LIKE ? AND diet LIKE ? AND style LIKE ?',
-                        (id_query, name_query, meal_query, difficulty_query, diet_query, style_query))
+        cursor.execute('SELECT * FROM recipe WHERE id LIKE ? AND name LIKE ? AND meal LIKE ? AND difficulty LIKE ? AND diet LIKE ?',
+                        (id_query, name_query, meal_query, difficulty_query, diet_query))
         items = cursor.fetchall()
         conn.close()
         if not items:
