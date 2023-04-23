@@ -1,20 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<style>
+    textarea {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+  </style>  
+  
     <h1>{% block title %} Recipe Search {% endblock %}</h1>
-    <label for="id">Recipe ID</label>
-        <br>
-        <form method="POST" action="{{ url_for('search') }}">
-        <input size = 25 type="integer" name="id_query" placeholder="Enter your ID query">
-        <br>
     <label for="name">Recipe Name</label>
         <br>
         <form method="POST" action="{{ url_for('search') }}">
         <input size = 25 type="text" name="name_query" placeholder="Enter your name query">
         <br>
-    <label for="meal">Meal Type</label>
+    <label for="id">Recipe ID</label>
         <br>
         <form method="POST" action="{{ url_for('search') }}">
-        <input size = 25 type="text" name="meal_query" placeholder="Enter your meal query">
+        <input size = 25 type="integer" name="id_query" placeholder="Enter your ID query">
+        <br>
+    <label for="meal">Meal Type</label>
+        <br>
+        <form method="POST" action="{{ url_for('advancedsearch') }}">
+            <select name="meal_query">
+                <option value="">Enter your meal query</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Snack">Snack</option>
+                <option value="Dessert">Dessert</option>
+            </select>
         <br>
     <label for="difficulty">Difficulty Rating 1-10</label>
         <br>
@@ -23,11 +38,40 @@
         <br>
     <label for="diet">Dietary Restrictions</label>
         <br>
-        <form method="POST" action="{{ url_for('search') }}">
-        <input size = 25 type="text" name="diet_query" placeholder="Enter your diet query">
+        <form method="POST" action="{{ url_for('advancedsearch') }}">
+        <select name="diet_query">
+            <option value="">Enter your diet query</option>
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Dairy Free">Dairy Free</option>
+            <option value="Gluten Free">Gluten Free</option>
+            <option value="Keto">Keto</option>
+        </select>
         <br>
 
-        <br><br><button type="submit">Search</button>
+        <label for="allergies">List allergies</label><br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 50 type="text" name="allergies" placeholder="List allergies">
+        <br>
+
+    <label for="list">Ingredients List</label>
+        <br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 50 type="text" name="list_query" placeholder="Enter your ingredients query">
+        <br>
+    
+    <label for="steps">Directions</label>
+        <br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 50 type="text" name="steps_query" placeholder="Enter your steps query">
+        <br>
+    <label for="time">Time</label>
+        <br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 25 type="integer" name="time_query" placeholder="Enter your time query">
+        <br>
+
+        <button type="submit">Search</button>
       </form>
 
 {% endblock %}

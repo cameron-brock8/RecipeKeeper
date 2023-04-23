@@ -5,6 +5,17 @@ from openpyxl import load_workbook
 conn = sqlite3.connect('database.db')
 cursor = conn.cursor()
 
+cursor.execute("DROP TABLE IF EXISTS recipe")
+cursor.execute("""
+    CREATE TABLE recipe (
+    id INT PRIMARY KEY, 
+    name CHAR(20) UNIQUE,
+    meal CHAR(20),
+    difficulty INT,
+    diet CHAR(20)
+);
+""")
+
 cursor.execute("DROP TABLE IF EXISTS ingredients")
 cursor.execute("""
    CREATE TABLE ingredients (
@@ -31,14 +42,6 @@ index = 0
 
 # Iterate over each row of the DataFrame and insert it into the database
 for id, name, meal, difficulty, diet, ingredients, steps, time in worksheet.iter_rows(min_row=2, values_only=True):
-    #id = index + 1
-    #name = row[1]
-    #meal = row[2]
-    #difficulty = row[3]
-    #diet = row[4]
-    #ingredients = row[5]
-    #steps = row[6]
-    #time = row[7]
 
     cursor.execute("""
         INSERT INTO recipe (id, name, meal, difficulty, diet)

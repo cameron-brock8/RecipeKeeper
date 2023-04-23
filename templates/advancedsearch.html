@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{% block title %} Recipe Search by Ingredients {% endblock %}</h1>
+    
+    <label for="ingredients">What ingredients do you have on hand?</label>
+        <br> <br>
+        <form method="POST" action="{{ url_for('advancedsearch') }}">
+        <input type="integer" name="ingredients_query" placeholder="Enter your ingredients" 
+        style="width: 400px; height: 200px; text-align: left;">
+        <br>
+
+    
+
+    <br><br><button type="submit">Search</button>
+    </form>
+    
+
+{% endblock %}

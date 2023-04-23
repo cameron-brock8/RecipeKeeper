@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Add New Recipe to Database {% endblock %}</h1>
+
+       <style>
+       textarea {
+         font-family: Arial, sans-serif;
+         font-size: 14px;
+       }
+
+     </style>    
+
+<h1>{% block title %} Add New Recipe to RecipeKeeper {% endblock %}</h1>
     <form method="post">
         <label for="name">Recipe Name</label>
         <br>
