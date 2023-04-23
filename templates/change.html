@@ -19,9 +19,16 @@
 
         <label for="meal">Meal Type</label>
         <br>
-        <input type="text" name="meal"
-                  placeholder="Meal Type"
-                  value="{{ request.form['meal'] or recipe['meal'] }}"></input>
+        <form method="POST" >
+            <select name="meal">
+                <option value="{{ request.form['id'] or recipe['meal'] or none }}">Meal Type</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Snack">Snack</option>
+                <option value="Dessert">Dessert</option>
+                <option value="None">None</option>
+            </select>
         <br>
 
         <label for="difficulty">Difficulty Rating 1-10</label>
@@ -31,7 +38,7 @@
                value="{{ request.form['difficulty'] or recipe['difficulty'] }}"></input>
         <br>
 
-          <label for="diet">Dietary Restrictions</label>
+        <label for="diet">Dietary Restrictions</label>
         <br>
         <input type="text" name="diet"
                placeholder="Dietary Restrictions"

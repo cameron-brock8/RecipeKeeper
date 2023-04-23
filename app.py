@@ -53,6 +53,8 @@ def recipekeeper():
 
 @app.route('/add', methods=('GET', 'POST'))
 def add():
+    conn = get_db_connection()
+    cursor = conn.cursor()
     if request.method == 'POST':
         id = request.form['id']
         name = request.form['name']
@@ -64,12 +66,10 @@ def add():
         time = request.form['time']
 
         if not id:
-            flash('ID is required!')
+            flash("ID is required!")
         elif not name:
             flash('Name is required!')
         else:
-            conn = get_db_connection()
-            cursor = conn.cursor()
             cursor.execute('INSERT INTO recipe (id, name, meal, difficulty, diet) VALUES (?, ?, ?, ?, ?)',
                          (id, name, meal, difficulty, diet))
             cursor.execute('INSERT INTO ingredients (id, list) VALUES (?, ?)',
@@ -78,6 +78,7 @@ def add():
                          (id, steps, time))
             conn.commit()
             conn.close()
+            flash("Successfully added a new recipe!")
             return redirect(url_for('recipes'))
     
     return render_template('add.html')
@@ -146,16 +147,13 @@ def search():
     diet_query = request.form.get('diet_query')
     if not diet_query:
         diet_query = "%"
-    list_query = request.form.get('list_query')
-    if not list_query:
-        list_query = "%"
     steps_query = request.form.get('steps_query')
     if not steps_query:
         steps_query = "%"
     time_query = request.form.get('time_query')
     if not time_query:
         time_query = "%"
-    if id_query == "%" and name_query == "%" and meal_query == "%" and difficulty_query == "%" and diet_query == "%" and list_query == "%" and steps_query == "%" and time_query == "%": 
+    if id_query == "%" and name_query == "%" and meal_query == "%" and difficulty_query == "%" and diet_query == "%" and steps_query == "%" and time_query == "%": 
         flash('Enter a search query')
         return render_template('search.html')
     else:
@@ -167,10 +165,9 @@ def search():
                         'AND (recipe.meal IS NULL or recipe.meal LIKE ?) '
                         'AND (recipe.difficulty IS NULL or recipe.difficulty LIKE ?) '
                         'AND (recipe.diet IS NULL or recipe.diet LIKE ?) '
-                        'AND (ingredients.list IS NULL or ingredients.list LIKE ?) '
                         'AND (directions.steps IS NULL or directions.steps LIKE ?) '
                         'AND (directions.time IS NULL or directions.time LIKE ?)',
-                    (id_query, f'%{name_query}%', meal_query, difficulty_query, diet_query, f'%{list_query}%', f'%{steps_query}%', time_query))
+                    (id_query, f'%{name_query}%', meal_query, difficulty_query, diet_query, f'%{steps_query}%', time_query))
         items = cursor.fetchall()
         conn.close()
         if not items:

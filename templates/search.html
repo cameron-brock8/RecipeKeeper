@@ -48,17 +48,6 @@
             <option value="Keto">Keto</option>
         </select>
         <br>
-
-        <label for="allergies">List allergies</label><br>
-        <form method="POST" action="{{ url_for('search') }}">
-        <input size = 50 type="text" name="allergies" placeholder="List allergies">
-        <br>
-
-    <label for="list">Ingredients List</label>
-        <br>
-        <form method="POST" action="{{ url_for('search') }}">
-        <input size = 50 type="text" name="list_query" placeholder="Enter your ingredients query">
-        <br>
     
     <label for="steps">Directions</label>
         <br>
@@ -69,6 +58,11 @@
         <br>
         <form method="POST" action="{{ url_for('search') }}">
         <input size = 25 type="integer" name="time_query" placeholder="Enter your time query">
+        <br>
+
+        <label for="allergies">List any allergens</label><br>
+        <form method="POST" action="{{ url_for('search') }}">
+        <input size = 50 type="text" name="allergies" placeholder="List any allergens">
         <br>
 
         <button type="submit">Search</button>
