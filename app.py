@@ -28,8 +28,16 @@ def checkDiet(list, allergies):
     for ingredient in ingredients:
         if ingredient in allergy:
             return True
-        
     return False
+
+#advanced view function
+def recipe_view():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DROP VIEW IF EXISTS recipe_view")
+    cursor.execute('CREATE VIEW recipe_view AS SELECT * FROM recipe '
+                    'JOIN ingredients ON recipe.id = ingredients.id '
+                    'JOIN directions ON recipe.id = directions.id ')
 
 #home page
 @app.route('/')
@@ -48,7 +56,8 @@ def recipekeeper():
 def recipes():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM recipe JOIN ingredients ON recipe.id = ingredients.id JOIN directions ON recipe.id = directions.id')
+    recipe_view()
+    cursor.execute('SELECT * FROM recipe_view')
     items = cursor.fetchall()
     conn.close()
     return render_template('recipe.html', items=items)      
@@ -92,7 +101,8 @@ def add():
 def change(id):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM recipe JOIN ingredients ON recipe.id = ingredients.id JOIN directions ON recipe.id = directions.id WHERE recipe.id = ?', (id,))
+    
+    cursor.execute('SELECT * FROM recipe_view WHERE id = ?', (id,))
     recipe = cursor.fetchone()
     conn.close()
 
@@ -164,28 +174,24 @@ def search():
         flash('Enter a search query')
         return render_template('search.html')
     else:
-        cursor.execute('SELECT * '
-                       'FROM recipe JOIN ingredients ON recipe.id = ingredients.id '
-                       'JOIN directions ON recipe.id = directions.id '
-                        'WHERE recipe.id LIKE ? '
-                        'AND recipe.name LIKE ? '
-                        'AND (recipe.meal IS NULL or recipe.meal LIKE ?) '
-                        'AND (recipe.difficulty IS NULL or recipe.difficulty LIKE ?) '
-                        'AND (recipe.diet IS NULL or recipe.diet LIKE ?) '
-                        'AND (directions.steps IS NULL or directions.steps LIKE ?) '
-                        'AND (directions.time IS NULL or directions.time LIKE ?)',
+        cursor.execute('SELECT * FROM recipe_view '
+                        'WHERE id LIKE ? '
+                        'AND name LIKE ? '
+                        'AND (meal IS NULL or meal LIKE ?) '
+                        'AND (difficulty IS NULL or difficulty LIKE ?) '
+                        'AND (diet IS NULL or diet LIKE ?) '
+                        'AND (steps IS NULL or steps LIKE ?) '
+                        'AND (time IS NULL or time LIKE ?)',
                     (id_query, f'%{name_query}%', meal_query, difficulty_query, diet_query, f'%{steps_query}%', time_query))
         items = cursor.fetchall()
-        cursor.execute('SELECT SUM(directions.time), COUNT(*) '
-                       'FROM recipe JOIN ingredients ON recipe.id = ingredients.id '
-                       'JOIN directions ON recipe.id = directions.id '
-                        'WHERE recipe.id LIKE ? '
-                        'AND recipe.name LIKE ? '
-                        'AND (recipe.meal IS NULL or recipe.meal LIKE ?) '
-                        'AND (recipe.difficulty IS NULL or recipe.difficulty LIKE ?) '
-                        'AND (recipe.diet IS NULL or recipe.diet LIKE ?) '
-                        'AND (directions.steps IS NULL or directions.steps LIKE ?) '
-                        'AND (directions.time IS NULL or directions.time LIKE ?)',
+        cursor.execute('SELECT * FROM recipe_view '
+                        'WHERE id LIKE ? '
+                        'AND name LIKE ? '
+                        'AND (meal IS NULL or meal LIKE ?) '
+                        'AND (difficulty IS NULL or difficulty LIKE ?) '
+                        'AND (diet IS NULL or diet LIKE ?) '
+                        'AND (steps IS NULL or steps LIKE ?) '
+                        'AND (time IS NULL or time LIKE ?)',
                     (id_query, f'%{name_query}%', meal_query, difficulty_query, diet_query, f'%{steps_query}%', time_query))
         result = cursor.fetchone()
         minutes = result[0]
@@ -223,8 +229,7 @@ def advancedsearch():
     else:
         ingredients_list = ingredients_query.split(",")
         search_string = "%{}%".format("%".join(ingredients_list))
-        cursor.execute('SELECT * FROM recipe JOIN ingredients ON recipe.id = ingredients.id '
-                       'JOIN directions ON recipe.id = directions.id WHERE list LIKE ?',
+        cursor.execute('SELECT * FROM recipe_view WHERE list LIKE ?',
                         (search_string,))
         items = cursor.fetchall()
         print(items)
