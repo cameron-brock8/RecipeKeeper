@@ -34,6 +34,17 @@ cursor.execute("""
     FOREIGN KEY (id) REFERENCES recipe(id)
 );
 """)
+               
+cursor.execute("DROP TABLE IF EXISTS uses")
+cursor.execute("""
+   CREATE TABLE uses(
+    name CHAR(20) UNIQUE,
+    list TEXT,
+    PRIMARY KEY(name, list),
+    FOREIGN KEY (name) REFERENCES recipe(name),
+    FOREIGN KEY (list) REFERENCES ingredients(list)
+);
+""")
 
 # Read data from the Excel spreadsheet
 workbook = load_workbook(filename='RecipeDatabase.xlsx')
@@ -57,6 +68,11 @@ for id, name, meal, difficulty, diet, ingredients, steps, time in worksheet.iter
         INSERT INTO directions (id, steps, time)
         VALUES (?, ?, ?)
     """, ( id, steps, time ))
+
+    cursor.execute("""
+        INSERT INTO uses (name, list)
+        VALUES (?, ?)
+    """, (name, ingredients) ) 
 
 # Commit the changes and close the connection
 conn.commit()

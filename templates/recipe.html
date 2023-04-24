@@ -31,6 +31,7 @@
     {% endif %}
 
     {% for item in items %}
+    
     <tr>
             <b><span class="recipe-name">{{ item[1] }}</span></b><br>
             <span class="recipe-id">Recipe id: {{ item[0] }}<span><br>
@@ -39,7 +40,15 @@
             <span class="diet">Dietary Restrictions: {{ item[4] }}</span><br>
             <span class="ingredients">Ingredients: {{ item[6] }}</span><br>
             <span class="directions">Directions: {{ item[8] }}</span><br>
-            <span class="time">Time: {{ item[9] }}</span><br>
+            {% if item[9] | int > 60 %}
+                {% if (item[9] | int //60) > 1 %}
+                <span class="time">Time: {{ item[9] | int //60 }} hours and {{ item[9] | int %60 }} minutes</span><br>
+                {% else %}
+                <span class="time">Time: {{ item[9] | int //60 }} hour and {{ item[9] | int %60 }} minutes</span><br>
+                {% endif %}
+            {% else %}
+                <span class="time">Time: {{ item[9] }} minutes </span><br>
+            {% endif %}
     </tr>
         <div>
             <a href="{{ url_for('change',id=item['id']) }}">Edit Recipe</a> 
