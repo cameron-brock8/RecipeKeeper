@@ -184,21 +184,25 @@ def search():
                         'AND (time IS NULL or time LIKE ?)',
                     (id_query, f'%{name_query}%', meal_query, difficulty_query, diet_query, f'%{steps_query}%', time_query))
         items = cursor.fetchall()
-        cursor.execute('SELECT * FROM recipe_view '
-                        'WHERE id LIKE ? '
-                        'AND name LIKE ? '
-                        'AND (meal IS NULL or meal LIKE ?) '
-                        'AND (difficulty IS NULL or difficulty LIKE ?) '
-                        'AND (diet IS NULL or diet LIKE ?) '
-                        'AND (steps IS NULL or steps LIKE ?) '
-                        'AND (time IS NULL or time LIKE ?)',
-                    (id_query, f'%{name_query}%', meal_query, difficulty_query, diet_query, f'%{steps_query}%', time_query))
-        result = cursor.fetchone()
-        minutes = result[0]
-        num_recipes = result[1]
         if not items:
             flash('No recipes match your query')
             return render_template('search.html')
+        else:
+            cursor.execute('SELECT SUM(directions.time), COUNT(*) '
+                       'FROM recipe JOIN ingredients ON recipe.id = ingredients.id '
+                       'JOIN directions ON recipe.id = directions.id '
+                        'WHERE recipe.id LIKE ? '
+                        'AND recipe.name LIKE ? '
+                        'AND (recipe.meal IS NULL or recipe.meal LIKE ?) '
+                        'AND (recipe.difficulty IS NULL or recipe.difficulty LIKE ?) '
+                        'AND (recipe.diet IS NULL or recipe.diet LIKE ?) '
+                        'AND (directions.steps IS NULL or directions.steps LIKE ?) '
+                        'AND (directions.time IS NULL or directions.time LIKE ?)',
+                    (id_query, f'%{name_query}%', meal_query, difficulty_query, diet_query, f'%{steps_query}%', time_query))
+            result = cursor.fetchone()
+            minutes = result[0]
+            num_recipes = result[1]
+        
         
         #allergen check
         allergies = request.form['allergies']
